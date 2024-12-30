@@ -1,0 +1,7 @@
+To play misere nim you need a prolog interpreter, swipl was used for development and its the one assumed on this example.
+You also need a python interpreter, python 3.13 was used for this example.
+
+Copy nim.pl on this directory.
+Open a console on this directory.
+Run `play-misere-nim.py` with your python interpreter.
+Enjoy playing.
