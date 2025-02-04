@@ -1,0 +1,7 @@
+Use left and right arrows to select a stack of rocks to remove from.
+
+Use numbers from 1 to 9 to remove that amount of rocks from the stack.
+
+You start playing.
+
+You and the AI take alternate turns playing.
