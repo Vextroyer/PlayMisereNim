@@ -11,3 +11,8 @@ You can read more on https://en.wikipedia.org/wiki/Nim.
 
 # Why we made this project ? :
 This project was made as an evaluation for the Declarative Programming Subject of the Computer Science Career of the University of Havana.
+
+# Collaborators :
+https://github.com/GlenRios/
+https://github.com/Arcanoxxx-01/
+https://github.com/Vextroyer/
