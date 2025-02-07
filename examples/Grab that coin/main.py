@@ -1,3 +1,4 @@
+import subprocess
 import time
 import random
 import pygame as pg
@@ -53,11 +54,10 @@ def play_sound(sound):
 
 
 def make_enemy_move(nim_instance: [int]):
-    for i in range(len(nim_instance)):
-        if nim_instance[i] > 0:
-            nim_instance[i] = nim_instance[i] - 1
-            break
-    return nim_instance
+    engine_results = subprocess.run(["engine.exe"] + list(map(str,nim_instance)) ,capture_output=True,text=True)
+    new_nim_instance = list(map(int, engine_results.stdout.strip().split()))
+    return new_nim_instance
+
 
 def generate_random_nim_instance(size = 10):
     nim = [0] * size
