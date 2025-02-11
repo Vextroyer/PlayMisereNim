@@ -1,3 +1,4 @@
+import os
 import subprocess
 import time
 import random
@@ -15,7 +16,7 @@ def init_rocks(nim_instance: [int]):
         img = pg.transform.scale(img,(32,32))
         return img
     
-    rock_sp = spritesheet("assets\\rocks\\rocks.png")
+    rock_sp = spritesheet(os.path.join("assets","rocks","rocks.png"))
     
     rock_imgs = [[]] * len(nim_instance)
     for i in range(0,len(nim_instance)):
@@ -27,7 +28,7 @@ def init_rocks(nim_instance: [int]):
 def init_background(screen_width,screen_height):
     # Get the path of a background image.
     def get_random_background():
-        background_img_path = "assets\\backgrounds\\bg" + str(random.randint(1,10)) + ".png"
+        background_img_path = os.path.join("assets","backgrounds","bg" + str(random.randint(1,10)) + ".png")
         return background_img_path
     
     # Load a background from an image
@@ -39,14 +40,14 @@ def init_background(screen_width,screen_height):
     return background_img
     
 def init_cursor():
-    cursor_img = pg.image.load("assets\\cursor\\hand.png").convert()
+    cursor_img = pg.image.load(os.path.join("assets","cursor","hand.png")).convert()
     cursor_img = pg.transform.rotate(cursor_img,90)
     return cursor_img
 
 def init_sounds():
-    main = "assets\\audio\\main.mp3"
-    win = "assets\\audio\\win.mp3"
-    lose = "assets\\audio\\lose.mp3"
+    main = os.path.join("assets","audio","main.mp3")
+    win = os.path.join("assets","audio","win.mp3")
+    lose = os.path.join("assets","audio","lose.mp3")
     return main,win,lose
 def play_sound(sound):
     pg.mixer.music.load(sound)
@@ -54,7 +55,7 @@ def play_sound(sound):
 
 
 def make_enemy_move(nim_instance: [int]):
-    engine_results = subprocess.run(["engine.exe"] + list(map(str,nim_instance)) ,capture_output=True,text=True)
+    engine_results = subprocess.run([os.path.join("assets","engine.exe")] + list(map(str,nim_instance)) ,capture_output=True,text=True)
     new_nim_instance = list(map(int, engine_results.stdout.strip().split()))
     return new_nim_instance
 
@@ -207,7 +208,7 @@ message = ""
 def get_random_prize():
     reward = ["Coin.png","Gem.png"]
     reward = reward[random.randint(0,1)]
-    reward = "assets\\rewards\\" + reward
+    reward = os.path.join("assets","rewards",reward)
     return reward
 
 img_prize = pg.image.load(get_random_prize())
