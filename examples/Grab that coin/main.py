@@ -54,11 +54,20 @@ def play_sound(sound):
     pg.mixer.music.play()
 
 
-def make_enemy_move(nim_instance: [int]):
+def make_optimal_enemy_move(nim_instance: [int]):
     engine_results = subprocess.run([os.path.join("assets","engine.exe")] + list(map(str,nim_instance)) ,capture_output=True,text=True)
     new_nim_instance = list(map(int, engine_results.stdout.strip().split()))
     return new_nim_instance
 
+def make_random_enemy_move(nim_instance: [int]):
+    non_zero = list(filter(lambda x: x > 0,nim))
+    index = random.randint(0,len(non_zero - 1))
+    value = random.randint(1,non_zero[index])
+    for i in range(len(nim_instance)):
+        if nim_instance[i] == non_zero[index]:
+            nim_instance[i] = value
+            break
+    return nim_instance
 
 def generate_random_nim_instance(size = 10):
     nim = [0] * size
@@ -101,18 +110,64 @@ def check_empty_game(nim_instance: [int]):
             break
     return end
 
+# Init font for printing messages
+pg.font.init() 
+my_font = pg.font.SysFont('Comic Sans MS', 30)
+message = ""
+
 # Game loop
 play_sound(sound_main)
+
+running = True
+difficulty = 0
+cursor_pos = 0
+while running:
+    for event in pg.event.get():
+        if event.type == pg.QUIT:
+            exit()
+        elif event.type == pg.KEYDOWN:
+            if event.key == pg.K_LEFT or event.key == pg.K_RIGHT:
+                # Handle moving the cursor
+                cursor_pos = cursor_pos + (-1 if event.key == pg.K_LEFT else 1)
+                # Stay on the range [0,3)
+                cursor_pos = (cursor_pos + 3) % 3
+            elif event.key == pg.K_SPACE or event.key == pg.K_RETURN:
+                difficulty = cursor_pos
+                running = False
+            
+    # Draw the background
+    screen.blit(bg_img,(0,0))
+    
+    message = my_font.render("Select a difficulty",True,(0,0,0))
+    screen.blit(message,(130,200))
+    
+    message = my_font.render("Easy",True,(0,0,0))
+    screen.blit(message,(90,300))
+    
+    message = my_font.render("Medium",True,(0,0,0))
+    screen.blit(message,(200,300))
+    
+    message = my_font.render("Hard",True,(0,0,0))
+    screen.blit(message,(350,300))
+    
+    startx = [110,245,375]
+    startx = startx[cursor_pos]
+    starty = 350
+    screen.blit(cursor_img,(startx,starty))
+    
+    # Render the changes of the screen
+    pg.display.flip()
+
 running = True
 win = False
 enemy_plays = False
-pg.mixer.music.play()
+cursor_pos = 0
 while running:
     # Handle events
     for event in pg.event.get():
         rocks_removed = 0
         if event.type == pg.QUIT:
-            running = False
+            exit()
         elif event.type == pg.KEYDOWN:
             if event.key == pg.K_1:
                 rocks_removed = 1
@@ -136,8 +191,7 @@ while running:
                 # Handle moving the cursor
                 cursor_pos = cursor_pos + (-1 if event.key == pg.K_LEFT else 1)
                 # Stay on the range [0,len(nim))
-                cursor_pos = max(0,cursor_pos)
-                cursor_pos = min(len(nim) - 1,cursor_pos)
+                cursor_pos = (cursor_pos + len(nim)) % len(nim)
             
             # Remove a rock from the current stack
             if rocks_removed > 0 and nim[cursor_pos] >= rocks_removed:
@@ -173,7 +227,7 @@ while running:
         time.sleep(1)
     
         #Enemy plays
-        nim = make_enemy_move(nim)
+        nim = make_optimal_enemy_move(nim) if random.randint(0,2) >= difficulty else make_random_enemy_move(nim)
         
         if check_empty_game(nim):
             running = False
@@ -198,11 +252,6 @@ while running:
         pg.display.flip()
 
 # End of game logic
-
-# Init font for printing messages
-pg.font.init() 
-my_font = pg.font.SysFont('Comic Sans MS', 30)
-message = ""
 
 # Init prizes
 def get_random_prize():

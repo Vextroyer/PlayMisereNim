@@ -1,3 +1,7 @@
+Use left and right arrows to change the difficulty.
+
+Press enter or spacebar to select the difficulty.
+
 Use left and right arrows to select a stack of rocks to remove from.
 
 Use numbers from 1 to 9 to remove that amount of rocks from the stack.
