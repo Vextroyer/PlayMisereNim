@@ -61,7 +61,7 @@ def make_optimal_enemy_move(nim_instance: [int]):
 
 def make_random_enemy_move(nim_instance: [int]):
     non_zero = list(filter(lambda x: x > 0,nim))
-    index = random.randint(0,len(non_zero - 1))
+    index = random.randint(0,len(non_zero) - 1)
     value = random.randint(1,non_zero[index])
     for i in range(len(nim_instance)):
         if nim_instance[i] == non_zero[index]:
@@ -227,7 +227,7 @@ while running:
         time.sleep(1)
     
         #Enemy plays
-        nim = make_optimal_enemy_move(nim) if random.randint(0,2) >= difficulty else make_random_enemy_move(nim)
+        nim = make_optimal_enemy_move(nim) if random.randint(0,2) <= difficulty else make_random_enemy_move(nim)
         
         if check_empty_game(nim):
             running = False
